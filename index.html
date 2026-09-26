@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handyman Care | Solo Owner & Craftsman</title>
+    <script>
+        function runProtection() {
+            // 1. Check if the user is on a mobile device (don't block phones/tablets)
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) return;
+
+            // 2. Disable Right-Click Context Menu
+            document.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+            });
+
+            // 3. Disable Keyboard Shortcuts for Inspect, View Source, and Save
+            document.addEventListener('keydown', function (e) {
+                // Prevent F12
+                if (e.key === 'F12') {
+                    e.preventDefault();
+                }
+
+                // Prevent Ctrl+U (View Source), Ctrl+S (Save), Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+                if (e.ctrlKey && (
+                    e.key === 'u' || e.key === 'U' || 
+                    e.key === 's' || e.key === 'S' || 
+                    (e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J' || e.key === 'c' || e.key === 'C'))
+                )) {
+                    e.preventDefault();
+                }
+            });
+
+            // 4. Enforce the strict DevTools blocker for PCs
+            const threshold = 160;
+            setInterval(() => {
+                if ((window.outerWidth - window.innerWidth > threshold) || 
+                    (window.outerHeight - window.innerHeight > threshold)) {
+                    document.open();
+                    document.write(""); 
+                    document.close();
+                    window.location.replace("about:blank");
+                }
+            }, 50);
+        }
+
+        // Start protection as soon as the head loads
+        runProtection();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slateCustom: '#636466',
+                        slateDark: '#f8fafc',
+                        amberGold: '#f5a623',
+                        amberHover: '#e0951a',
+                        cardDark: '#ffffff'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -10px rgba(245, 166, 35, 0.2);
+        }
+        /* Custom scrollbar for light aesthetic */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f5a623; }
+
+        /* Blinking animation matching website color (#f5a623) */
+        @keyframes amberBlink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.85); }
+        }
+        .amber-blink-circle {
+            animation: amberBlink 1.2s infinite ease-in-out;
+            background-color: #f5a623;
+        }
+    </style>
+</head>
+<body class="bg-slateDark text-gray-700 font-sans antialiased pb-20 md:pb-0">
+
+    <!-- Demo Preview Badge (Bottom Right) -->
+    <div class="fixed bottom-20 md:bottom-4 right-4 z-50 flex items-center gap-2 bg-slate-900/90 text-white px-3.5 py-1.5 rounded-full shadow-lg border border-gray-700 text-xs font-semibold backdrop-blur-md">
+        <span class="w-2.5 h-2.5 rounded-full amber-blink-circle inline-block"></span>
+        <span class="font-bold uppercase tracking-wide text-gray-200">Demo Preview</span>
+    </div>
+
+    <!-- Watermark (Center Center - Scaled to fit screen viewports perfectly) -->
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 z-30 pointer-events-none select-none text-4xl sm:text-6xl lg:text-[8.5vw] font-black text-gray-400/15 uppercase tracking-widest whitespace-nowrap">
+        Create with AO
+    </div>
+
+    <header class="sticky top-0 z-40 bg-slateDark/90 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo (Unified Style & Size) -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-11 h-11 rounded-xl bg-amberGold flex items-center justify-center text-slate-900 font-extrabold text-2xl shadow-lg">
+                        <i class="fa-solid fa-house-chimney-user"></i>
+                    </div>
+                    <div>
+                        <span class="text-lg font-extrabold tracking-tight text-gray-900">Handyman Care</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-8 font-medium text-sm text-gray-600">
+                    <a href="#services" class="hover:text-amberGold transition">Services</a>
+                    <a href="#craftsman" class="hover:text-amberGold transition">Meet Marcus</a>
+                    <a href="#estimator" class="hover:text-amberGold transition">Instant Quote</a>
+                    <a href="#diagnostic" class="hover:text-amberGold transition">Photo Diagnostic</a>
+                </nav>
+
+                <!-- Desktop Action -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="tel:5558493729" class="text-sm font-semibold text-gray-700 hover:text-gray-900 flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-200 shadow-sm">
+                        <i class="fa-solid fa-phone text-amberGold"></i> (555) 849-3729
+                    </a>
+                    <a href="#estimator" class="bg-amberGold text-slate-900 font-bold px-5 py-2.5 rounded-xl hover:bg-amberHover transition shadow-md">
+                        Get Estimate
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-800 focus:outline-none p-2 text-2xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slateDark border-t border-gray-200 px-6 py-4 space-y-4 shadow-xl">
+            <a href="#services" class="block text-base text-gray-800 hover:text-amberGold font-medium">Services</a>
+            <a href="#craftsman" class="block text-base text-gray-800 hover:text-amberGold font-medium">Meet Marcus</a>
+            <a href="#estimator" class="block text-base text-gray-800 hover:text-amberGold font-medium">Instant Quote</a>
+            <a href="#diagnostic" class="block text-base text-gray-800 hover:text-amberGold font-medium">Photo Diagnostic</a>
+            <div class="pt-4 border-t border-gray-200 flex flex-col space-y-3">
+                <a href="tel:5558493729" class="text-sm font-semibold text-amberGold flex items-center gap-2">
+                    <i class="fa-solid fa-phone"></i> Direct Call: (555) 849-3729
+                </a>
+                <a href="#estimator" class="bg-amberGold text-slate-900 text-center font-bold py-3 rounded-xl shadow">
+                    Get Free Estimate
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative overflow-hidden py-20 lg:py-28 bg-gradient-to-b from-slateDark to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-amberGold/10 text-amberGold px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-amberGold/20">
+                        <i class="fa-solid fa-user-check"></i> 100% Solo-Operated & Accountability Guaranteed
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-gray-900">
+                        One Expert Craftsman. <span class="text-amberGold">Complete Property Care.</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-600 max-w-2xl font-light leading-relaxed">
+                        No subcontractors or rotating crews. When you hire Handyman Care, you get master craftsman Marcus handling your small renovations, custom fencing, summer lawn care, and winter snow removal personally.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#estimator" class="bg-amberGold text-slate-900 font-bold px-8 py-4 rounded-xl hover:bg-amberHover transition shadow-xl text-center flex items-center justify-center gap-2">
+                            <span>Calculate Live Estimate</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#diagnostic" class="bg-white hover:bg-gray-50 text-gray-800 font-semibold px-8 py-4 rounded-xl transition border border-gray-300 text-center flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-camera text-amberGold"></i> Send Photo Diagnostic
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200 max-w-lg mx-auto lg:mx-0 text-left">
+                        <div>
+                            <span class="block text-2xl font-bold text-amberGold">15 Yrs</span>
+                            <span class="text-xs text-gray-500">Master Experience</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-amberGold">Direct</span>
+                            <span class="text-xs text-gray-500">Owner Access</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-amberGold">5★</span>
+                            <span class="text-xs text-gray-500">Local Reputation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solo Owner Card Graphic -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-md bg-cardDark rounded-3xl p-6 border border-gray-200 shadow-xl">
+                        <div class="absolute -top-3 -right-3 bg-amberGold text-slate-900 text-xs font-black uppercase px-3 py-1 rounded-lg shadow">
+                            Direct Contact
+                        </div>
+                        <div class="relative h-72 rounded-2xl overflow-hidden mb-6 border border-gray-200">
+                            <picture>
+                                <source srcset="images/founder.avif" type="image/avif">
+                                <source srcset="images/founder.webp" type="image/webp">
+                                <img src="images/founder.png" alt="Marcus - Owner & Master Craftsman" class="w-full h-full object-cover">
+                            </picture>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent flex items-end p-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Marcus Vance</h3>
+                                    <p class="text-xs text-amberGold font-medium">Founder, Operator & Lead Craftsman</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-3 text-sm text-gray-600">
+                            <div class="flex items-center justify-between bg-slateDark p-3 rounded-xl border border-gray-200">
+                                <span class="text-gray-500">Phone / SMS:</span>
+                                <a href="tel:5558493729" class="font-bold text-amberGold hover:underline">(555) 849-3729</a>
+                            </div>
+                            <div class="flex items-center justify-between bg-slateDark p-3 rounded-xl border border-gray-200">
+                                <span class="text-gray-500">Response Time:</span>
+                                <span class="font-semibold text-gray-900">Under 30 Minutes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-amberGold font-bold uppercase tracking-wider text-xs bg-amberGold/10 px-3 py-1 rounded-full border border-amberGold/20">Bento Utility Grid</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 mb-4">All-Season Property Services</h2>
+                <p class="text-gray-600 text-base">Click or explore each specialized service delivered directly by Marcus with top-tier craftsmanship.</p>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Bento Item 1: Renovations (Large Span) -->
+                <div class="md:col-span-7 bg-cardDark rounded-3xl overflow-hidden border border-gray-200 shadow-md bento-card flex flex-col justify-between group">
+                    <div class="relative h-64 sm:h-72 overflow-hidden">
+                        <picture>
+                            <source srcset="images/reno.avif" type="image/avif">
+                            <source srcset="images/reno.webp" type="image/webp">
+                            <img src="images/reno.png" alt="Small Home Renovations" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </picture>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 bg-amberGold text-slate-900 text-xs font-bold px-3 py-1 rounded-lg shadow">
+                            Indoor Upgrade
+                        </div>
+                    </div>
+                    <div class="p-8 -mt-12 relative z-10">
+                        <div class="w-12 h-12 bg-amberGold/20 text-amberGold rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amberGold/30 shadow-sm">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Small Home Renovations</h3>
+                        <p class="text-gray-600 text-sm mb-6 leading-relaxed">
+                            Custom carpentry, drywall repairs, kitchen/bath tile updates, and interior trim work executed with pristine precision and zero mess left behind.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs text-gray-600">
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Drywall & Painting</span>
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Custom Shelving</span>
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Tile & Backsplash</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bento Item 2: Fencing (Medium Span) -->
+                <div class="md:col-span-5 bg-cardDark rounded-3xl overflow-hidden border border-gray-200 shadow-md bento-card flex flex-col justify-between group">
+                    <div class="relative h-48 sm:h-56 overflow-hidden">
+                        <picture>
+                            <source srcset="images/fence.avif" type="image/avif">
+                            <source srcset="images/fence.webp" type="image/webp">
+                            <img src="images/fence.png" alt="Fence Installation" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </picture>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 bg-amberGold text-slate-900 text-xs font-bold px-3 py-1 rounded-lg shadow">
+                            Outdoor Security
+                        </div>
+                    </div>
+                    <div class="p-6 -mt-10 relative z-10">
+                        <div class="w-12 h-12 bg-amberGold/20 text-amberGold rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amberGold/30 shadow-sm">
+                            <i class="fa-solid fa-columns"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Fence Installation & Repair</h3>
+                        <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                            Sturdy wood and vinyl fencing builds, post replacements, and storm damage fixes built to withstand harsh weather.
+                        </p>
+                        <a href="#estimator" class="text-xs font-bold text-amberGold hover:underline flex items-center gap-1">
+                            <span>Estimate Fencing</span> <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento Item 3: Grass Cutting (Medium Span) -->
+                <div class="md:col-span-5 bg-cardDark rounded-3xl overflow-hidden border border-gray-200 shadow-md bento-card flex flex-col justify-between group">
+                    <div class="relative h-48 sm:h-56 overflow-hidden">
+                        <picture>
+                            <source srcset="images/lawn.avif" type="image/avif">
+                            <source srcset="images/lawn.webp" type="image/webp">
+                            <img src="images/lawn.png" alt="Grass Cutting & Lawn Care" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </picture>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 bg-amberGold text-slate-900 text-xs font-bold px-3 py-1 rounded-lg shadow">
+                            Summer Care
+                        </div>
+                    </div>
+                    <div class="p-6 -mt-10 relative z-10">
+                        <div class="w-12 h-12 bg-amberGold/20 text-amberGold rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amberGold/30 shadow-sm">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Grass Cutting & Lawn Care</h3>
+                        <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                            Scheduled weekly/bi-weekly mowing, precise edge trimming, aeration, and pristine seasonal cleanups.
+                        </p>
+                        <a href="#estimator" class="text-xs font-bold text-amberGold hover:underline flex items-center gap-1">
+                            <span>Estimate Lawn Care</span> <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento Item 4: Snow Removal (Large Span) -->
+                <div class="md:col-span-7 bg-cardDark rounded-3xl overflow-hidden border border-gray-200 shadow-md bento-card flex flex-col justify-between group">
+                    <div class="relative h-64 sm:h-72 overflow-hidden">
+                        <picture>
+                            <source srcset="images/snow.avif" type="image/avif">
+                            <source srcset="images/snow.webp" type="image/webp">
+                            <img src="images/snow.png" alt="Snow Removal Services" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </picture>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
+                        <div class="absolute top-4 left-4 bg-amberGold text-slate-900 text-xs font-bold px-3 py-1 rounded-lg shadow">
+                            Winter Defense
+                        </div>
+                    </div>
+                    <div class="p-8 -mt-12 relative z-10">
+                        <div class="w-12 h-12 bg-amberGold/20 text-amberGold rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amberGold/30 shadow-sm">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Snow Removal & Ice Management</h3>
+                        <p class="text-gray-600 text-sm mb-6 leading-relaxed">
+                            Prompt driveway, walkway, and steps clearing right after major snowfalls. Salting and sanding included to keep your property slip-free and safe.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs text-gray-600">
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Driveway Clearing</span>
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Walkway Salting</span>
+                            <span class="bg-slateDark px-3 py-1.5 rounded-lg border border-gray-200">Seasonal Contracts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="craftsman" class="py-24 bg-slateDark border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-cardDark rounded-3xl p-8 sm:p-12 border border-gray-200 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-5 relative">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-amberGold to-transparent rounded-3xl blur opacity-20"></div>
+                    <div class="relative rounded-2xl overflow-hidden border border-gray-200 aspect-square shadow-sm">
+                        <picture>
+                            <source srcset="images/founder.avif" type="image/avif">
+                            <source srcset="images/founder.webp" type="image/webp">
+                            <img src="images/founder.png" alt="Marcus Working" class="w-full h-full object-cover">
+                        </picture>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 space-y-6">
+                    <span class="text-amberGold font-bold uppercase tracking-wider text-xs bg-amberGold/10 px-3 py-1 rounded-full border border-amberGold/20">The Solo Owner Advantage</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Why Work Directly With Marcus?</h2>
+                    <p class="text-gray-600 text-base leading-relaxed">
+                        "When you call large maintenance franchises, you never know who is showing up at your front door. With Handyman Care, I am your single point of contact from our first phone call through project completion. My personal reputation is built into every fence post, fresh-cut lawn, and renovated room."
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-slateDark p-4 rounded-xl border border-gray-200 flex items-start gap-3">
+                            <i class="fa-solid fa-shield text-amberGold text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-sm">Fully Insured</h4>
+                                <p class="text-xs text-gray-500 mt-1">Comprehensive liability protection for your peace of mind.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slateDark p-4 rounded-xl border border-gray-200 flex items-start gap-3">
+                            <i class="fa-solid fa-comments text-amberGold text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-sm">Zero Hand-offs</h4>
+                                <p class="text-xs text-gray-500 mt-1">No miscommunications. You talk directly with the craftsman.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 flex items-center gap-4">
+                        <a href="tel:5558493729" class="bg-amberGold text-slate-900 font-bold px-6 py-3.5 rounded-xl hover:bg-amberHover transition shadow flex items-center gap-2">
+                            <i class="fa-solid fa-phone"></i> Call Marcus Directly
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="estimator" class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-amberGold font-bold uppercase tracking-wider text-xs bg-amberGold/10 px-3 py-1 rounded-full border border-amberGold/20">2026 Interactive Tool</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 mb-3">Live Quote Estimator</h2>
+                <p class="text-gray-600">Select your service and adjust the project scale to instantly calculate estimated pricing and request booking.</p>
+            </div>
+
+            <div class="bg-cardDark border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-xl">
+                <form id="quote-form" onsubmit="submitQuoteForm(event)" class="space-y-8">
+                    <div>
+                        <label class="block text-sm font-bold uppercase text-gray-700 mb-3">1. Select Service Category</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="border-2 border-gray-200 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer hover:border-amberGold transition has-[:checked]:border-amberGold has-[:checked]:bg-amberGold/5 bg-slateDark">
+                                <input type="radio" name="service" value="renovation" class="text-amberGold focus:ring-amberGold" checked onchange="updateEstimate()">
+                                <div>
+                                    <span class="block font-bold text-gray-900 text-sm">Small Home Renovations</span>
+                                    <span class="text-xs text-gray-500">Carpentry, painting, tile</span>
+                                </div>
+                            </label>
+                            <label class="border-2 border-gray-200 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer hover:border-amberGold transition has-[:checked]:border-amberGold has-[:checked]:bg-amberGold/5 bg-slateDark">
+                                <input type="radio" name="service" value="fence" class="text-amberGold focus:ring-amberGold" onchange="updateEstimate()">
+                                <div>
+                                    <span class="block font-bold text-gray-900 text-sm">Fence Installation / Repair</span>
+                                    <span class="text-xs text-gray-500">Wood/vinyl fencing & posts</span>
+                                </div>
+                            </label>
+                            <label class="border-2 border-gray-200 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer hover:border-amberGold transition has-[:checked]:border-amberGold has-[:checked]:bg-amberGold/5 bg-slateDark">
+                                <input type="radio" name="service" value="lawn" class="text-amberGold focus:ring-amberGold" onchange="updateEstimate()">
+                                <div>
+                                    <span class="block font-bold text-gray-900 text-sm">Grass Cutting & Lawn Care</span>
+                                    <span class="text-xs text-gray-500">Mowing, edging & cleanup</span>
+                                </div>
+                            </label>
+                            <label class="border-2 border-gray-200 rounded-2xl p-4 flex items-center space-x-3 cursor-pointer hover:border-amberGold transition has-[:checked]:border-amberGold has-[:checked]:bg-amberGold/5 bg-slateDark">
+                                <input type="radio" name="service" value="snow" class="text-amberGold focus:ring-amberGold" onchange="updateEstimate()">
+                                <div>
+                                    <span class="block font-bold text-gray-900 text-sm">Snow Removal</span>
+                                    <span class="text-xs text-gray-500">Driveway & sidewalk clearing</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-bold uppercase text-gray-700">2. Project Scope / Size</label>
+                            <span id="scope-label" class="text-sm font-bold text-amberGold bg-amberGold/10 px-3 py-1 rounded-md border border-amberGold/20">Medium Project / Yard</span>
+                        </div>
+                        <input type="range" id="scope-range" min="1" max="3" value="2" step="1" oninput="updateEstimate()" class="w-full accent-amberGold cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>Small / Standard</span>
+                            <span>Medium / Average</span>
+                            <span>Large / Extensive</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slateDark p-6 rounded-2xl border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs text-gray-500 uppercase tracking-wider block">Estimated Price Range</span>
+                            <div id="price-output" class="text-3xl font-extrabold text-amberGold mt-1">$350 - $600</div>
+                            <span class="text-xs text-gray-500">*Confirmed by Marcus after quick review. Free cancellation.</span>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <button type="button" onclick="document.getElementById('contact-details').classList.remove('hidden'); this.scrollIntoView({behavior: 'smooth'});" class="w-full sm:w-auto bg-amberGold text-slate-900 font-bold px-6 py-3.5 rounded-xl hover:bg-amberHover transition shadow">
+                                Proceed with Estimate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="contact-details" class="hidden space-y-4 pt-4 border-t border-gray-200">
+                        <h4 class="font-bold text-lg text-gray-900">Your Contact Details</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                                <input type="text" id="client-name" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone Number</label>
+                                <input type="tel" id="client-phone" required placeholder="(555) 000-0000" class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Property Address / Neighborhood</label>
+                            <input type="text" id="client-address" required placeholder="123 Maple Street" class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900">
+                        </div>
+                        <button type="submit" class="w-full bg-amberGold text-slate-900 font-bold py-4 rounded-xl hover:bg-amberHover transition shadow-lg text-base">
+                            Send Quote Request to Marcus
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="diagnostic" class="py-24 bg-slateDark border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-amberGold font-bold uppercase tracking-wider text-xs bg-amberGold/10 px-3 py-1 rounded-full border border-amberGold/20">2026 UX Feature</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 mb-3">Photo Diagnostic Upload</h2>
+                <p class="text-gray-600">Snap or upload a photo of your repair issue, broken fence, or overgrown yard. Marcus will review it and reply with a fast assessment.</p>
+            </div>
+
+            <div class="bg-cardDark border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-xl">
+                <form id="diagnostic-form" onsubmit="submitDiagnostic(event)" class="space-y-6">
+                    <div class="border-2 border-dashed border-gray-300 hover:border-amberGold rounded-2xl p-8 text-center cursor-pointer transition bg-white shadow-sm" onclick="document.getElementById('diagnostic-file').click()">
+                        <div class="w-16 h-16 bg-amberGold/10 text-amberGold rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-amberGold/20">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Click to upload photo or drag & drop</h4>
+                        <p class="text-xs text-gray-500" id="file-name-display">Supports JPG, PNG (Max 10MB)</p>
+                        <input type="file" id="diagnostic-file" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Your Name</label>
+                            <input type="text" required placeholder="Jane Smith" class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone Number</label>
+                            <input type="tel" required placeholder="(555) 000-0000" class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Describe the Issue</label>
+                        <textarea rows="3" required placeholder="e.g., Two fence posts snapped after last night's wind storm..." class="w-full px-4 py-3 rounded-xl bg-slateDark border border-gray-300 focus:outline-none focus:border-amberGold text-sm text-gray-900"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-amberGold text-slate-900 font-bold py-4 rounded-xl hover:bg-amberHover transition shadow-lg text-base">
+                        Send Photo to Marcus for Assessment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-amberGold font-bold uppercase tracking-wider text-xs bg-amberGold/10 px-3 py-1 rounded-full border border-amberGold/20">Client Reviews</span>
+                <h2 class="text-3xl font-extrabold text-gray-900 mt-2">What Homeowners Say About Marcus</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-cardDark p-6 rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amberGold space-x-1 mb-4 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm italic mb-6">"Marcus fixed our back fence and retiled our kitchen backsplash himself. Having one reliable craftsman who actually shows up on time is priceless."</p>
+                    </div>
+                    <div class="flex items-center space-x-3 border-t border-gray-100 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-amberGold/10 text-amberGold font-bold flex items-center justify-center text-sm border border-amberGold/30">MR</div>
+                        <div>
+                            <span class="block font-bold text-sm text-gray-900">Mark Richardson</span>
+                            <span class="text-xs text-gray-500">Homeowner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cardDark p-6 rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amberGold space-x-1 mb-4 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm italic mb-6">"His snow removal service is exceptionally prompt. I never get snowed in anymore, and he even clears the walkways without damaging the concrete."</p>
+                    </div>
+                    <div class="flex items-center space-x-3 border-t border-gray-100 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-amberGold/10 text-amberGold font-bold flex items-center justify-center text-sm border border-amberGold/30">SL</div>
+                        <div>
+                            <span class="block font-bold text-sm text-gray-900">Sarah Larson</span>
+                            <span class="text-xs text-gray-500">Property Owner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cardDark p-6 rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amberGold space-x-1 mb-4 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm italic mb-6">"Best lawn care and handyman service in the metro area. Marcus takes immense pride in his work, and it shows in every single project."</p>
+                    </div>
+                    <div class="flex items-center space-x-3 border-t border-gray-100 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-amberGold/10 text-amberGold font-bold flex items-center justify-center text-sm border border-amberGold/30">DT</div>
+                        <div>
+                            <span class="block font-bold text-sm text-gray-900">David Taylor</span>
+                            <span class="text-xs text-gray-500">Homeowner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slateDark border-t border-gray-200 pt-16 pb-24 md:pb-12 text-gray-600 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="space-y-4">
+                    <!-- Footer Brand Logo (Unified Style & Size) -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-amberGold flex items-center justify-center text-slate-900 font-extrabold text-xl shadow">
+                            <i class="fa-solid fa-house-chimney-user"></i>
+                        </div>
+                        <div>
+                            <span class="text-lg font-extrabold tracking-tight text-gray-900">Handyman Care</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500">Owned and operated by Marcus Vance. Direct, honest, all-season property maintenance and home improvement.</p>
+                </div>
+                <div>
+                    <h4 class="text-amberGold font-bold text-xs uppercase tracking-wider mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#services" class="hover:text-amberGold transition">Services</a></li>
+                        <li><a href="#craftsman" class="hover:text-amberGold transition">Meet Marcus</a></li>
+                        <li><a href="#estimator" class="hover:text-amberGold transition">Instant Estimator</a></li>
+                        <li><a href="#diagnostic" class="hover:text-amberGold transition">Photo Diagnostic</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-amberGold font-bold text-xs uppercase tracking-wider mb-4">Core Services</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><span>Small Home Renovations</span></li>
+                        <li><span>Fence Installation & Repair</span></li>
+                        <li><span>Grass Cutting & Lawn Care</span></li>
+                        <li><span>Snow Removal</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-amberGold font-bold text-xs uppercase tracking-wider mb-4">Direct Contact</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-amberGold"></i> (555) 849-3729</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-amberGold"></i> marcus@handymancare.com</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-clock text-amberGold"></i> Mon-Sat: 7:00 AM - 7:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500">
+                <p>&copy; 2026 Handyman Care. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#" class="hover:text-amberGold transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-amberGold transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile Action Dock -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 md:hidden flex justify-around p-3 shadow-xl">
+        <a href="tel:5558493729" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 rounded-xl text-center text-xs flex items-center justify-center gap-2 mr-2 border border-gray-300">
+            <i class="fa-solid fa-phone text-amberGold"></i> Call Direct
+        </a>
+        <a href="#estimator" class="flex-1 bg-amberGold text-slate-900 font-bold py-3 rounded-xl text-center text-xs flex items-center justify-center gap-2 ml-2 shadow">
+            <i class="fa-solid fa-calculator"></i> Get Quote
+        </a>
+    </div>
+
+    <!-- Custom Modal for Success Messages -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden p-4">
+        <div class="bg-cardDark border border-gray-200 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
+            <div class="w-16 h-16 bg-amberGold/10 text-amberGold rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-amberGold/30">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-900 mb-2">Request Sent to Marcus!</h3>
+            <p id="modal-msg" class="text-gray-600 text-sm mb-6">Thank you! Marcus has received your details and will call you back within 30 minutes.</p>
+            <button onclick="closeModal()" class="w-full bg-amberGold text-slate-900 font-bold py-3.5 rounded-xl hover:bg-amberHover transition shadow">
+                Back to Website
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle & Auto-Close on Link Click
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when any link inside it is clicked
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Interactive Quote Estimator Logic
+        function updateEstimate() {
+            const serviceRadio = document.querySelector('input[name="service"]:checked');
+            const scopeRange = document.getElementById('scope-range');
+            const priceOutput = document.getElementById('price-output');
+            const scopeLabel = document.getElementById('scope-label');
+
+            const service = serviceRadio ? serviceRadio.value : 'renovation';
+            const scope = parseInt(scopeRange.value);
+
+            let baseMin = 150;
+            let baseMax = 300;
+            let scopeText = "Small / Standard";
+
+            if (scope === 1) {
+                scopeText = "Small / Standard";
+            } else if (scope === 2) {
+                scopeText = "Medium / Average";
+                baseMin *= 2;
+                baseMax *= 2;
+            } else {
+                scopeText = "Large / Extensive";
+                baseMin *= 3.5;
+                baseMax *= 3.5;
+            }
+
+            if (service === 'renovation') {
+                baseMin += 200;
+                baseMax += 400;
+            } else if (service === 'fence') {
+                baseMin += 150;
+                baseMax += 300;
+            } else if (service === 'lawn') {
+                baseMin = Math.round(baseMin * 0.5);
+                baseMax = Math.round(baseMax * 0.6);
+            } else if (service === 'snow') {
+                baseMin = Math.round(baseMin * 0.6);
+                baseMax = Math.round(baseMax * 0.7);
+            }
+
+            scopeLabel.innerText = scopeText;
+            priceOutput.innerText = `$${Math.round(baseMin)} - $${Math.round(baseMax)}`;
+        }
+
+        // File upload display name
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('file-name-display').innerText = `Selected: ${file.name}`;
+                document.getElementById('file-name-display').classList.add('text-amberGold', 'font-bold');
+            }
+        }
+
+        // Form Submissions
+        function submitQuoteForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('client-name').value;
+            document.getElementById('modal-title').innerText = "Estimate Submitted!";
+            document.getElementById('modal-msg').innerText = `Thank you ${name}! Marcus has received your estimate request and will review the details right away.`;
+            document.getElementById('success-modal').classList.remove('hidden');
+            document.getElementById('quote-form').reset();
+            document.getElementById('contact-details').classList.add('hidden');
+            updateEstimate();
+        }
+
+        function submitDiagnostic(e) {
+            e.preventDefault();
+            document.getElementById('modal-title').innerText = "Photo Diagnostic Received!";
+            document.getElementById('modal-msg').innerText = `Marcus has received your photo upload and repair description. He will examine it and call you shortly with an assessment.`;
+            document.getElementById('success-modal').classList.remove('hidden');
+            document.getElementById('diagnostic-form').reset();
+            document.getElementById('file-name-display').innerText = "Supports JPG, PNG (Max 10MB)";
+            document.getElementById('file-name-display').classList.remove('text-amberGold', 'font-bold');
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // Initialize estimator on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateEstimate();
+        });
+    </script>
+</body>
+</html>
